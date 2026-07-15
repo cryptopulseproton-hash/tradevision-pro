@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useMarket } from "../context/MarketContext";
 
 const AdvancedRealTimeChart = dynamic(
   () =>
@@ -9,24 +10,30 @@ const AdvancedRealTimeChart = dynamic(
     ),
   {
     ssr: false,
+    loading: () => (
+      <div className="h-full flex items-center justify-center text-gray-400">
+        Loading TradingView Chart...
+      </div>
+    ),
   }
 );
 
 export default function TradingViewChart() {
-  return (
-    <section className="px-6 py-10">
-      <h2 className="text-3xl font-bold mb-6">
-        Live Trading Chart
-      </h2>
+  const { symbol } = useMarket();
 
-      <div className="rounded-xl overflow-hidden border border-gray-800">
-        <AdvancedRealTimeChart
-          theme="dark"
-          symbol="BINANCE:BTCUSDT"
-          width="100%"
-          height={600}
-        />
-      </div>
-    </section>
+  return (
+    <div className="w-full h-full">
+      <AdvancedRealTimeChart
+        theme="dark"
+        symbol={symbol}
+        interval="15"
+        timezone="Etc/UTC"
+        width="100%"
+        height="100%"
+        hide_top_toolbar={false}
+        hide_side_toolbar={false}
+        allow_symbol_change={true}
+      />
+    </div>
   );
 }

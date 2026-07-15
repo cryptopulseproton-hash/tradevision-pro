@@ -1,28 +1,39 @@
+"use client";
+
+import { useMarket } from "../../context/MarketContext";
+
+const items = [
+  "BTCUSDT",
+  "ETHUSDT",
+  "BNBUSDT",
+  "SOLUSDT",
+  "XRPUSDT",
+  "DOGEUSDT",
+  "ADAUSDT",
+];
+
 export default function Sidebar() {
-  const items = [
-    "BTCUSDT",
-    "ETHUSDT",
-    "BNBUSDT",
-    "SOLUSDT",
-    "XAUUSD",
-    "EURUSD",
-    "GBPUSD",
-  ];
+  const { symbol, setSymbol } = useMarket();
 
   return (
-    <aside className="w-64 bg-[#111827] border-r border-gray-800 p-4">
+    <aside className="bg-[#111827] border-r border-gray-800 p-4 h-full">
       <h2 className="text-xl font-bold text-green-400 mb-4">
-        Watchlist
+        ⭐ Watchlist
       </h2>
 
-      <div className="space-y-3">
+      <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
         {items.map((item) => (
-          <div
+          <button
             key={item}
-            className="bg-[#1f2937] rounded-lg p-3 hover:bg-[#374151] cursor-pointer transition"
+            onClick={() => setSymbol(`BINANCE:${item}`)}
+            className={`rounded-lg p-3 text-left transition ${
+              symbol === `BINANCE:${item}`
+                ? "bg-green-600 text-white"
+                : "bg-[#1f2937] hover:bg-[#374151]"
+            }`}
           >
             {item}
-          </div>
+          </button>
         ))}
       </div>
     </aside>

@@ -13,40 +13,46 @@ export default function MarketInfo() {
 
   useEffect(() => {
     async function load() {
-      const res = await fetch("/api/market");
-      const data = await res.json();
-      setMarkets(data);
+      try {
+        const res = await fetch("/api/market");
+        const data = await res.json();
+        setMarkets(data);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     load();
   }, []);
 
   return (
-    <aside className="w-80 bg-[#111827] border-l border-gray-800 p-4">
+    <aside className="bg-[#111827] border-l border-gray-800 p-4 h-full">
       <h2 className="text-xl font-bold text-green-400 mb-4">
-        Live Market
+        📊 Live Market
       </h2>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
         {markets.map((item) => (
           <div
             key={item.symbol}
-            className="bg-[#1f2937] rounded-lg p-4"
+            className="rounded-xl bg-[#1f2937] p-4 border border-gray-700 hover:border-green-500 transition"
           >
-            <h3 className="font-bold">{item.symbol}</h3>
+            <h3 className="font-bold text-lg">
+              {item.symbol}
+            </h3>
 
-            <p className="text-2xl">
-              ${Number(item.lastPrice).toFixed(2)}
+            <p className="text-2xl font-semibold mt-2">
+              ${Number(item.lastPrice).toLocaleString()}
             </p>
 
             <p
-              className={
+              className={`mt-2 font-semibold ${
                 Number(item.priceChangePercent) >= 0
                   ? "text-green-400"
                   : "text-red-400"
-              }
+              }`}
             >
-              {item.priceChangePercent}%
+              {Number(item.priceChangePercent).toFixed(2)}%
             </p>
           </div>
         ))}
